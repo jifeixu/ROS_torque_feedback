@@ -3,9 +3,9 @@ function right_ft_callback( ~, msg )
 %   Detailed explanation goes here
 global right_ft;
 
-right_ft.force=msg.Wrench.Force;
-right_ft.torqueX=msg.Wrench.Torque.X;
-right_ft.torqueY=msg.Wrench.Torque.Y;
+right_ft.force=double(msg.Wrench.Force.Z);
+right_ft.torqueX=double(msg.Wrench.Torque.X);
+right_ft.torqueY=double(msg.Wrench.Torque.Y);
 
 end
 

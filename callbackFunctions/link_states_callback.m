@@ -4,11 +4,13 @@ function link_states_callback( ~, msg )
 global link_6_pos;
 global global_zmp;
 global alpha;
+global left_ft;
+global right_ft;
 
-link_6_pos.leftx=msg.Pose(8).Position.X;
-link_6_pos.lefty=msg.Pose(8).Position.Y;
-link_6_pos.rightx=msg.Pose(14).Position.X;
-link_6_pos.righty=msg.Pose(14).Position.Y;
+link_6_pos.leftx=double(msg.Pose(8).Position.X);
+link_6_pos.lefty=double(msg.Pose(8).Position.Y);
+link_6_pos.rightx=double(msg.Pose(14).Position.X);
+link_6_pos.righty=double(msg.Pose(14).Position.Y);
 
 global_zmp.x=current_ZMP_calculator([left_ft.torqueY,right_ft.torqueY],...
                                     [left_ft.force,right_ft.force],...

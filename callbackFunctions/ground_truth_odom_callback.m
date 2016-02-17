@@ -3,10 +3,10 @@ function ground_truth_odom_callback( ~, msg )
 %   Detailed explanation goes here
 global odometer;
 
-odometer.posX=msg.Pose.Pose.Position.X;
-odometer.posY=msg.Pose.Pose.Position.Y;
-odometer.velX=msg.Twist.Twist.Linear.X;
-odometer.velY=msg.Twist.Twist.Linear.Y;
+odometer.posX=double(msg.Pose.Pose.Position.X);
+odometer.posY=double(msg.Pose.Pose.Position.Y);
+odometer.velX=double(msg.Twist.Twist.Linear.X);
+odometer.velY=double(msg.Twist.Twist.Linear.Y);
 
 
 
