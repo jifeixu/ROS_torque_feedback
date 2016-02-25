@@ -5,8 +5,9 @@ function [ u ] = ankle_controller_y( desired,actual )
 %   u = control effort
 
 e= (desired-actual)';
-
-u=[-3235 -150 20.5]*e+desired(3);
+desired;
+actual;
+u=-(500*[-5.1591   -1.4138    0.4595]*e+desired(3));
 
 end
 
