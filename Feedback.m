@@ -1,7 +1,7 @@
 %% connect to ROS and excute the thetas?
 close all 
 clear all
-load('traj_Com_foot_same_XY');
+load('traj_10cm_height');
 dX_long=gradient(X_long);
 dX_lat=gradient(X_lat);
 rosshutdown;
@@ -39,21 +39,6 @@ global calculated_com
        calculated_com=struct('X_com',0,'Y_com',0,'Z_com',0);
 % global joint_states;
 %        joint_states=struct(
-%% subscribers, without callback
-% subscriber define joint names
-right_leg_state_sub=rossubscriber('/right_leg_controller/state');
-left_leg_state_sub=rossubscriber('/left_leg_controller/state');
-tor_state_sub = rossubscriber('/torso_controller/state');
-
-
-%% subscribers, with callback.
-link_states_sub=rossubscriber('/gazebo/link_states',@link_states_callback);
-right_ft_sub=rossubscriber('/right_ft',@right_ft_callback);
-left_ft_sub=rossubscriber('/left_ft',@left_ft_callback);
-ground_truth_odom_sub=rossubscriber('/ground_truth_odom',@ground_truth_odom_callback);
-joint_states_sub=rossubscriber('/joint_states',@joint_states_callback);
-clock_sub = rossubscriber('/clock',@clock_callback);
-
 %% publishers:
 %effort controllers for ankle
 global right_leg_joint_5_effort_pub;
@@ -95,6 +80,23 @@ pose = rosmessage(setpose);
 pl = rosmessage('trajectory_msgs/JointTrajectoryPoint'); 
 pr = rosmessage('trajectory_msgs/JointTrajectoryPoint');
 ptor = rosmessage('trajectory_msgs/JointTrajectoryPoint');
+%% subscribers, without callback
+% subscriber define joint names
+right_leg_state_sub=rossubscriber('/right_leg_controller/state');
+left_leg_state_sub=rossubscriber('/left_leg_controller/state');
+tor_state_sub = rossubscriber('/torso_controller/state');
+
+
+%% subscribers, with callback.
+link_states_sub=rossubscriber('/gazebo/link_states',@link_states_callback);
+right_ft_sub=rossubscriber('/right_ft',@right_ft_callback);
+left_ft_sub=rossubscriber('/left_ft',@left_ft_callback);
+ground_truth_odom_sub=rossubscriber('/ground_truth_odom',@ground_truth_odom_callback);
+joint_states_sub=rossubscriber('/joint_states',@joint_states_callback);
+clock_sub = rossubscriber('/clock',@clock_callback);
+
+
+
 %% ros clients
 % rosclients
 pause_gazebo = rossvcclient('/gazebo/pause_physics');
