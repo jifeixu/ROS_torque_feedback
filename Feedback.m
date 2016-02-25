@@ -167,15 +167,13 @@ ZMP_time=[];                        % keeps track of time, still useful
 % X_com=[];                         % use odobmeter instead. for now.
 % Y_com=[];
 % Z_com=[];
-ankle_control_on=1;
+
 pause(2)
-call(unpause_gazebo);
 timeout=0.1;
 while(~KEY_IS_PRESSED)
+    ankle_control_on=1;
     i=i+1;
-    call(pause_gazebo);
-    pause()
-    call(unpause_gazebo);
+    pause(0.1);
     disp(['looping...' num2str(i),'with i ',num2str(time_management.i),', alpha ',num2str(alpha),' actual i is ',num2str(time_management.i-timeout*1000)]);
 
     if(time_management.i <= 4200 && time_management.i >0)
