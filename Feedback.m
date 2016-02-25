@@ -85,49 +85,6 @@ ptor = rosmessage('trajectory_msgs/JointTrajectoryPoint');
 right_leg_state_sub=rossubscriber('/right_leg_controller/state');
 left_leg_state_sub=rossubscriber('/left_leg_controller/state');
 tor_state_sub = rossubscriber('/torso_controller/state');
-
-
-%% subscribers, with callback.
-link_states_sub=rossubscriber('/gazebo/link_states',@link_states_callback);
-right_ft_sub=rossubscriber('/right_ft',@right_ft_callback);
-left_ft_sub=rossubscriber('/left_ft',@left_ft_callback);
-ground_truth_odom_sub=rossubscriber('/ground_truth_odom',@ground_truth_odom_callback);
-joint_states_sub=rossubscriber('/joint_states',@joint_states_callback);
-clock_sub = rossubscriber('/clock',@clock_callback);
-
-
-
-%% ros clients
-% rosclients
-pause_gazebo = rossvcclient('/gazebo/pause_physics');
-unpause_gazebo = rossvcclient('/gazebo/unpause_physics');
-reset_simulation = rossvcclient('/gazebo/reset_simulation');
-reset_world = rossvcclient('/gazebo/reset_world');
-%%  Cemter of Mass definitions (maybe not used yet)
-% %MASS definition:
-% mass=[0,                                                        ...for ground plane
-%       12.33 ,                                                   ...base
-%       1.03  ,0.70   ,3.98   ,2.86   ,0.68   ,2.01   ,           ...left leg
-%       1.03  ,0.70   ,3.98   ,2.86   ,0.68   ,2.01   ,           ...right leg
-%       1.58  ,11.38  ,                                           ...torso
-%       1.54  ,1.60   ,1.64   ,1.2    ,1.22   ,0.42   ,0.86   ,   ...arm_left
-%       0.06  ,0.03   ,0.02   ,0.06   ,                           ...hand_left_index
-%       0.06  ,0.03   ,0.02   ,0.06   ,                           ...hand_left_middle
-%       0.07  ,                                                   ...hand_left_thumb
-%       1.54  ,1.60   ,1.64   ,1.2    ,1.22   ,0.42   ,0.86   ,   ...arm_right
-%       0.06  ,0.03   ,0.02   ,0.06   ,                           ...hand_right_index
-%       0.06  ,0.03   ,0.02   ,0.06   ,                           ...hand_right_middle
-%       0.07  ,                                                   ...hand_right_thumb
-%       1.12  ,1.85   ,                                           ...head
-%       ];
-% 
-% gazebo_link_states=receive(link_states_sub);
-% 
-% X_=zeros(size(gazebo_link_states.Pose));
-% Y_=zeros(size(gazebo_link_states.Pose));
-% Z_=zeros(size(gazebo_link_states.Pose));
-% 
-% M=sum(mass);
 %% initializations for joint names,
 %recieve names and assigne joint names
 rleg_state=receive(right_leg_state_sub);
@@ -137,30 +94,36 @@ tor_state = receive(tor_state_sub);
 theta_r.JointNames = rleg_state.JointNames;
 theta_l.JointNames = lleg_state.JointNames;
 theta_tor.JointNames = tor_state.JointNames;
-%% only stabilizing while standing.
+%% ros clients 
+% rosclients
+pause_gazebo = rossvcclient('/gazebo/pause_physics');
+unpause_gazebo = rossvcclient('/gazebo/unpause_physics');
+reset_simulation = rossvcclient('/gazebo/reset_simulation');
+reset_world = rossvcclient('/gazebo/reset_world');
+%% subscribers, with callback. let callback function subs run last. cuz it SLOWS DOWN EVERYTHING.
+link_states_sub=rossubscriber('/gazebo/link_states',@link_states_callback);
+right_ft_sub=rossubscriber('/right_ft',@right_ft_callback);
+left_ft_sub=rossubscriber('/left_ft',@left_ft_callback);
+ground_truth_odom_sub=rossubscriber('/ground_truth_odom',@ground_truth_odom_callback);
+joint_states_sub=rossubscriber('/joint_states',@joint_states_callback);
+clock_sub = rossubscriber('/clock',@clock_callback);
 
-% call(pause_gazebo);
-% need to write while loop just to publish all the efforts.
 sys_desired.x=[0 0 0];
 sys_desired.y=[0.09 0 0.065];
-%%%%%%%%%%%%% a press any key to stop loop method
+
+
+
+%% only stabilizing while standing.
+sys_desired.x=[0 0 0];
+sys_desired.y=[0.09 0 0.065];
+
 global KEY_IS_PRESSED
 KEY_IS_PRESSED = 0;
 gcf
 set(gcf, 'KeyPressFcn', @thisKeyPressFcn)
-%%%%%%%%%%%%%%%
-%copy from the test main:
+
 i=1;
-% theclock = receive(clock_sub); ignored by clock callback.
-
-% time_management.t0sec=clock.Sec;    % t0sec=clock.Sec;
-% time_management.t0nsec=clock.Nsec+0.1*10^9;  % t0nsec=clock.Nsec;
-% time_management.start_time=time_management.t0sec + time_management.t0nsec/10^9;%starttime = t0sec + t0nsec/10^9;
-% time_management.end_time=time_management.start_time+t(end);%endtime = starttime+t(end);
-
-
 pause(1)
-% call(unpause_gazebo);
 ankle_control_on=1;     
 while(~KEY_IS_PRESSED)
     i=i+1;
