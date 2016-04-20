@@ -6,7 +6,7 @@ function [ u ] = ankle_controller_x( desired,actual )
 
 e= (desired-actual)';
 
-u=[-3235 -150 20.5]*e+desired(3);
-
+% u=[-3235 -150 20.5]*e+desired(3);
+u=350*[ -4.6685   -2.4899    1.0228]*e+desired(3);
 end
 

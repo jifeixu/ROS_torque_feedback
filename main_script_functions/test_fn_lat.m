@@ -1,43 +1,43 @@
-function [ ZmpLat,Xc,tcnt ] = test_fn_lat()
+function [ ZmpLat,Xc,tcnt ] = test_fn_lat(time_scale,step_scale,zh)
 %TEST_FN_LAT Summary of this function goes here
 %   Generate lateral CoM traj and ZMP traj
 
-xc=0.09;
-xcd=-0.1;
+xc=0.075;
+xcd=-0.01;
 
 % Simulation parameters
-tf = 7;
+tf = time_scale*7;
 deltat = 0.001;
 
 syms T t;
 
 % LIPM parameters
 g = 9.8;
-zh = 0.7;   % Center of Mass constant height
+% zh = 0.75;   % Center of Mass constant height
 
 om = sqrt(g/zh);
 w=sqrt(g/zh);
 % Steps time duration
 
 
-tstepss1  = 0.8; % First Single support step time duration (1st segment)
-tstepds2  = 0.2; % First Double support step time duration (2nd segment)
-tstepss3  = 0.8; % Second Single support step time duration (3rd segment)
-tstepds4  = 0.2; % Second Double support step time duration (4th segment)
-tstepss5  = 0.8; % Third Single support step time duration (5th segment)
-tstepds6  = 0.2; % Third Double support step time duration (6th segment)
-tstepss7  = 0.8; % Fourth Single support step time duration (7th segment)
-tstepds8  = 0.2; % Fourth Double support step time duration (4th segment)
-tstepss9  = 0.8; % Fifth Single support step time duration (5th segment)
-tstepds10 = 0.2; % Fifth Double support step time duration (6th segment)
-tstepss11 = 0.8; % Sixth Single support step time duration (7th segment)
+tstepss1  = time_scale*0.8; % First Single support step time duration (1st segment)
+tstepds2  = time_scale*0.2; % First Double support step time duration (2nd segment)
+tstepss3  = time_scale*0.8; % Second Single support step time duration (3rd segment)
+tstepds4  = time_scale*0.2; % Second Double support step time duration (4th segment)
+tstepss5  = time_scale*0.8; % Third Single support step time duration (5th segment)
+tstepds6  = time_scale*0.2; % Third Double support step time duration (6th segment)
+tstepss7  = time_scale*0.8; % Fourth Single support step time duration (7th segment)
+tstepds8  = time_scale*0.2; % Fourth Double support step time duration (4th segment)
+tstepss9  = time_scale*0.8; % Fifth Single support step time duration (5th segment)
+tstepds10 = time_scale*0.2; % Fifth Double support step time duration (6th segment)
+tstepss11 = time_scale*0.8; % Sixth Single support step time duration (7th segment)
 
-steplength = 2*0.0725; % Step length
+steplength = step_scale*2*0.0725; % Step length
 
 
-steplength1 = 2*0.0725; % First step length
-steplength2 = 2*0.0725; % Second step length
-steplength3 = 2*0.0725; % Third step length
+steplength1 = step_scale*2*0.0725; % First step length
+steplength2 = step_scale*2*0.0725; % Second step length
+steplength3 = step_scale*2*0.0725; % Third step length
 
 ZMPLin = 0*0.05;    % Single support, ZMP variation in the linear case
                   % Of the total foot length 21 cm we set that 5 are

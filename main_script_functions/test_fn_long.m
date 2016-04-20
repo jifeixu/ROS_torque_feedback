@@ -1,11 +1,11 @@
-function [ Zmp,Xc,tcnt ] = test_fn_long(  )
+function [ Zmp,Xc,tcnt ] = test_fn_long(time_scale,step_scale,zh)
 %TEST_FN_LONG Summary of this function goes here
 %   Detailed explanation goes here
 xc=0;
-xcd=0.05;
+xcd=0.0;
 
 % Simulation parameters
-tf = 7;              % Total time
+tf = time_scale*7;              % Total time
 deltat = 0.001;
 
 % t = 0:deltat:tf;
@@ -22,7 +22,7 @@ deltat = 0.001;
    
 % LIPM parameters
 g = 9.8;
-zh = 0.7;   % Center of Mass constant height
+% zh = 0.75;   % Center of Mass constant height
 
 w = sqrt(g/zh);
 
@@ -31,19 +31,19 @@ w = sqrt(g/zh);
 syms T t
 
 % Steps time duration
-tstepss1 = 0.8; % First Single support step time duration (1st segment)
-tstepds2 = 0.2; % First Double support step time duration (2nd segment)
-tstepss3 = 0.8; % Second Single support step time duration (3rd segment)
-tstepds4 = 0.2; % Second Double support step time duration (4th segment)
-tstepss5 = 0.8; % Third Single support step time duration (5th segment)
-tstepds6 = 0.2; % Third Double support step time duration (6th segment)
-tstepss7 = 0.8; % Fourth Single support step time duration (7th segment)
+tstepss1 = time_scale*0.8; % First Single support step time duration (1st segment)
+tstepds2 = time_scale*0.2; % First Double support step time duration (2nd segment)
+tstepss3 = time_scale*0.8; % Second Single support step time duration (3rd segment)
+tstepds4 = time_scale*0.2; % Second Double support step time duration (4th segment)
+tstepss5 = time_scale*0.8; % Third Single support step time duration (5th segment)
+tstepds6 = time_scale*0.2; % Third Double support step time duration (6th segment)
+tstepss7 = time_scale*0.8; % Fourth Single support step time duration (7th segment)
 
 
 
-steplength1 = 0.2; % First step length
-steplength2 = 0.2; % Second step length
-steplength3 = 0.1; % Third step length
+steplength1 = step_scale*0.2; % First step length
+steplength2 = step_scale*0.2; % Second step length
+steplength3 = step_scale*0.1; % Third step length
 
 ZMPLin = 0*0.05;    % Single support, ZMP variation in the linear case
                   % for example of the total 21 cm of the foot length

@@ -1,51 +1,51 @@
-function [ llat,llong,lh,rlat,rlong,rh ] = test_fn_foot_placement()
+function [ llat,llong,lh,rlat,rlong,rh ] = test_fn_foot_placement(time_scale,step_scale,zh)
 %TEST_FN_FOOT_PLACEMENT llat,llong,lh,rlat,rlong,rh
 %   lat=Y, long=X, h=z, where z is negative.(absolute coordinates f
 % Simulation parameters
-tf = 7;              % Total time
+tf = time_scale*7;              % Total time
 deltat = 0.001;
 tcnt = 0:deltat:tf;
 
-zh = 0.7; % center of mass height
+% zh = 0.75; % center of mass height
 offset=zh;
 % Steps time duration
-tstepss1 = 0.8; % First Single support step time duration (1st segment)
-tstepds2 = 0.2; % First Double support step time duration (2nd segment)
-tstepss3 = 0.8; % Second Single support step time duration (3rd segment)
-tstepds4 = 0.2; % Second Double support step time duration (4th segment)
-tstepss5 = 0.8; % Third Single support step time duration (5th segment)
-tstepds6 = 0.2; % Third Double support step time duration (6th segment)
-tstepss7 = 0.8; % Fourth Single support step time duration (7th segment)
-tstepds8 = 0.2;
+tstepss1 = time_scale*0.8; % First Single support step time duration (1st segment)
+tstepds2 = time_scale*0.2; % First Double support step time duration (2nd segment)
+tstepss3 = time_scale*0.8; % Second Single support step time duration (3rd segment)
+tstepds4 = time_scale*0.2; % Second Double support step time duration (4th segment)
+tstepss5 = time_scale*0.8; % Third Single support step time duration (5th segment)
+tstepds6 = time_scale*0.2; % Third Double support step time duration (6th segment)
+tstepss7 = time_scale*0.8; % Fourth Single support step time duration (7th segment)
+tstepds8 = time_scale*0.2;
 
 steplength = 2*0.0725; % Step length for lat
 
-steplength1 = 0.2; % First step length for long
-steplength2 = 0.2; % Second step length for long
-steplength3 = 0.2; % Third step length for long
+steplength1 = step_scale*0.2; % First step length for long
+steplength2 = step_scale*0.2; % Second step length for long
+steplength3 = step_scale*0.2; % Third step length for long
 
 %% for long:
 %position at start of each segment
-left_long_0=0;  %0
-left_long_1=0;  %0.8
-left_long_2=0;  %1
-left_long_3=0.4;%1.8
-left_long_4=0.4;%2
-left_long_5=0.4;
-left_long_6=0.4;
-left_long_7=0.4; % stops moving.
-left_long_8=0.4;
+left_long_0=step_scale*0;  %0
+left_long_1=step_scale*0;  %0.8
+left_long_2=step_scale*0;  %1
+left_long_3=step_scale*0.4;%1.8
+left_long_4=step_scale*0.4;%2
+left_long_5=step_scale*0.4;
+left_long_6=step_scale*0.4;
+left_long_7=step_scale*0.4; % stops moving.
+left_long_8=step_scale*0.4;
 
 
-right_long_0=0;
-right_long_1=0.2;
-right_long_2=0.2;
-right_long_3=0.2;
-right_long_4=0.2;
-right_long_5=0.6;
-right_long_6=0.6;
-right_long_7=0.6;
-right_long_8=0.6;
+right_long_0=step_scale*0;
+right_long_1=step_scale*0.2;
+right_long_2=step_scale*0.2;
+right_long_3=step_scale*0.2;
+right_long_4=step_scale*0.2;
+right_long_5=step_scale*0.6;
+right_long_6=step_scale*0.6;
+right_long_7=step_scale*0.6;
+right_long_8=step_scale*0.6;
 
 t0 = 0.0;          % Initial time (first segment)
 t1 = t0 + tstepss1;
@@ -161,11 +161,30 @@ llat=0.075*ones(size(llong)); % for the whole duration;
 rlat=-0.075*ones(size(llong)); % for the whole duration;
 %% lh rh
 % use cosine wave, heigh/2 *(1-cos(2*pi*t/T))
-height=0.1;
-lh= height*0.5*(1-cos((2*pi/T32)*(tcnt-t2))).*(stepfun(tcnt,t2)-stepfun(tcnt,t3)); %sine 2-3
-rh= height*0.5*(1-cos((pi/T10)*(tcnt-t0)+pi)).*(stepfun(tcnt,t0)-stepfun(tcnt,t1))+...sine 0-1
-    height*0.5*(1-cos((2*pi/T54)*(tcnt-t4))).*(stepfun(tcnt,t4)-stepfun(tcnt,t5)); % sine 4-5
+height=0.05;
+% lh= height*0.5*(1-cos((2*pi/T32)*(tcnt-t2))).*(stepfun(tcnt,t2)-stepfun(tcnt,t3)); %sine 2-3
+% rh= height*0.5*(1-cos((pi/T10)*(tcnt-t0)+pi)).*(stepfun(tcnt,t0)-stepfun(tcnt,t1))+...sine 0-1
+%     height*0.5*(1-cos((2*pi/T54)*(tcnt-t4))).*(stepfun(tcnt,t4)-stepfun(tcnt,t5)); % sine 4-5
 % plot(tcnt,lh,tcnt,rh)
+klht23_1= quinticfit( t2,0,0,t2+T32/2,height,0);
+klht23_2= quinticfit( t2+T32/2,height,0,t3,0,0);
+
+lht23_1=(klht23_1*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t2)-stepfun(tcnt,t2+T32/2));
+lht23_2=(klht23_2*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t2+T32/2)-stepfun(tcnt,t3));
+
+krht45_1= quinticfit( t4,0,0,t4+T54/2,height,0);
+krht45_2= quinticfit( t4+T54/2,height,0,t5,0,0);
+
+rht45_1=(krht45_1*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t4)-stepfun(tcnt,t4+T54/2));
+rht45_2=(krht45_2*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t4+T54/2)-stepfun(tcnt,t5));
+
+krht01= quinticfit( t0,height,0,t1,0,0);
+rht01=(krht01*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t0)-stepfun(tcnt,t1));
+
+
+lh=lht23_1+lht23_2;
+rh=rht45_1+rht45_2+rht01;
+
 
 lh=lh-offset; %height is offset from the COM with offset of distance of COM.
 rh=rh-offset;

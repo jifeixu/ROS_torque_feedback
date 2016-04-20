@@ -2,12 +2,27 @@ function link_states_callback( ~, msg )
 %LINK_STATES_CALLBACK Summary of this function goes here
 %   Detailed explanation goes here
 global link_6_pos;
+global link_1_pos;
 global global_zmp;
 global alpha;
 global left_ft;
 global right_ft;
 global sys_desired;
 global calculated_com;
+global clock;
+global kalman_state_zmp_x;
+global kalman_state_zmp_y;
+
+
+persistent previous_time;
+
+if isempty(previous_time)
+    previous_time=clock;
+else
+    delta_time=clock.second-previous_time.second; % for realtime value <=10, its actually getting all the info
+    previous_time=clock;
+end
+
 
 mass=[0,                                                        ...for ground plane
       12.33 ,                                                   ...base
@@ -27,16 +42,37 @@ mass=[0,                                                        ...for ground pl
 
 link_6_pos.leftx=double(msg.Pose(8).Position.X);
 link_6_pos.lefty=double(msg.Pose(8).Position.Y);
+link_6_pos.leftz=double(msg.Pose(8).Position.Z);
 link_6_pos.rightx=double(msg.Pose(14).Position.X);
 link_6_pos.righty=double(msg.Pose(14).Position.Y);
+link_6_pos.rightz=double(msg.Pose(14).Position.Z);
 
-global_zmp.x=current_ZMP_calculator([left_ft.torqueY,right_ft.torqueY],...
+
+link_1_pos.leftx=double(msg.Pose(3).Position.X);
+link_1_pos.lefty=double(msg.Pose(3).Position.Y);
+link_1_pos.leftz=double(msg.Pose(3).Position.Z);
+link_1_pos.rightx=double(msg.Pose(9).Position.X);
+link_1_pos.righty=double(msg.Pose(9).Position.Y);
+link_1_pos.rightz=double(msg.Pose(9).Position.Z);
+
+% global_zmp.x=current_ZMP_calculator([left_ft.torqueY,right_ft.torqueY],...
+%                                     [left_ft.force,right_ft.force],...
+%                                     [link_6_pos.leftx,link_6_pos.rightx]);
+
+zmpx=current_ZMP_calculator([left_ft.torqueY,right_ft.torqueY],...
                                     [left_ft.force,right_ft.force],...
                                     [link_6_pos.leftx,link_6_pos.rightx]);
-global_zmp.y=current_ZMP_calculator([left_ft.torqueX,right_ft.torqueX],...
+[kalman_state_zmp_x,global_zmp.x]=Kal_filter(kalman_state_zmp_x,zmpx);                                
+                                
+% global_zmp.y=current_ZMP_calculator([left_ft.torqueX,right_ft.torqueX],...
+%                                     [left_ft.force,right_ft.force],...
+%                                     [link_6_pos.lefty,link_6_pos.righty]);
+zmpy=current_ZMP_calculator([left_ft.torqueX,right_ft.torqueX],...
                                     [left_ft.force,right_ft.force],...
                                     [link_6_pos.lefty,link_6_pos.righty]);
-                      
+[kalman_state_zmp_y,global_zmp.y]=Kal_filter(kalman_state_zmp_y,zmpy);                                
+                                
+                                
 alpha=alpha_generator(msg.Pose(8).Position.X,msg.Pose(8).Position.Y,...
                       msg.Pose(14).Position.X,msg.Pose(14).Position.Y,...
                       sys_desired.x(3),sys_desired.y(3));

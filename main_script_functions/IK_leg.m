@@ -1,5 +1,6 @@
 function [ Pk,th ] = IK_leg( xa,ya,za, L1, L2 )
 %UNTITLED Summary of this function goes here
+% return [knee position, joint angles]
 %   Detailed explanation goes here
 % z < 0 !!
 % xa = Pa(1); % assume Pa is ankle points
