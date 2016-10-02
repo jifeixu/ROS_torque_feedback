@@ -161,29 +161,29 @@ llat=0.075*ones(size(llong)); % for the whole duration;
 rlat=-0.075*ones(size(llong)); % for the whole duration;
 %% lh rh
 % use cosine wave, heigh/2 *(1-cos(2*pi*t/T))
-height=0.05;
-% lh= height*0.5*(1-cos((2*pi/T32)*(tcnt-t2))).*(stepfun(tcnt,t2)-stepfun(tcnt,t3)); %sine 2-3
-% rh= height*0.5*(1-cos((pi/T10)*(tcnt-t0)+pi)).*(stepfun(tcnt,t0)-stepfun(tcnt,t1))+...sine 0-1
-%     height*0.5*(1-cos((2*pi/T54)*(tcnt-t4))).*(stepfun(tcnt,t4)-stepfun(tcnt,t5)); % sine 4-5
+height=0.10;
+lh= height*0.5*(1-cos((2*pi/T32)*(tcnt-t2))).*(stepfun(tcnt,t2)-stepfun(tcnt,t3)); %sine 2-3
+rh= height*0.5*(1-cos((pi/T10)*(tcnt-t0)+pi)).*(stepfun(tcnt,t0)-stepfun(tcnt,t1))+...sine 0-1
+    height*0.5*(1-cos((2*pi/T54)*(tcnt-t4))).*(stepfun(tcnt,t4)-stepfun(tcnt,t5)); % sine 4-5
 % plot(tcnt,lh,tcnt,rh)
-klht23_1= quinticfit( t2,0,0,t2+T32/2,height,0);
-klht23_2= quinticfit( t2+T32/2,height,0,t3,0,0);
-
-lht23_1=(klht23_1*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t2)-stepfun(tcnt,t2+T32/2));
-lht23_2=(klht23_2*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t2+T32/2)-stepfun(tcnt,t3));
-
-krht45_1= quinticfit( t4,0,0,t4+T54/2,height,0);
-krht45_2= quinticfit( t4+T54/2,height,0,t5,0,0);
-
-rht45_1=(krht45_1*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t4)-stepfun(tcnt,t4+T54/2));
-rht45_2=(krht45_2*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t4+T54/2)-stepfun(tcnt,t5));
-
-krht01= quinticfit( t0,height,0,t1,0,0);
-rht01=(krht01*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t0)-stepfun(tcnt,t1));
-
-
-lh=lht23_1+lht23_2;
-rh=rht45_1+rht45_2+rht01;
+% klht23_1= quinticfit( t2,0,0,t2+T32/2,height,0);
+% klht23_2= quinticfit( t2+T32/2,height,0,t3,0,0);
+% 
+% lht23_1=(klht23_1*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t2)-stepfun(tcnt,t2+T32/2));
+% lht23_2=(klht23_2*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t2+T32/2)-stepfun(tcnt,t3));
+% 
+% krht45_1= quinticfit( t4,0,0,t4+T54/2,height,0);
+% krht45_2= quinticfit( t4+T54/2,height,0,t5,0,0);
+% 
+% rht45_1=(krht45_1*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t4)-stepfun(tcnt,t4+T54/2));
+% rht45_2=(krht45_2*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t4+T54/2)-stepfun(tcnt,t5));
+% 
+% krht01= quinticfit( t0,height,0,t1,0,0);
+% rht01=(krht01*[tcnt.^3; tcnt.^2; tcnt; tcnt.^0]).*(stepfun(tcnt,t0)-stepfun(tcnt,t1));
+% 
+% 
+% lh=lht23_1+lht23_2;
+% rh=rht45_1+rht45_2+rht01;
 
 
 lh=lh-offset; %height is offset from the COM with offset of distance of COM.

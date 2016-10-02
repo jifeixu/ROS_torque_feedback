@@ -88,6 +88,9 @@ torque_y_axis=ankle_controller_y(sys_desired.y,[calculated_com.Y_com,odometer.ve
                                                                    alpha);
                                                                
 if (ankle_control_on ==1)
+    
+ 
+    
     right_leg_joint_5_effort_msg.Data=double(u_effort.right_joint_5);
     if(alpha==0||u_effort.right_joint_6>0) % foot only turns outwards
         right_leg_joint_6_effort_msg.Data=double(u_effort.right_joint_6);
@@ -100,11 +103,18 @@ if (ankle_control_on ==1)
     else
         left_leg_joint_6_effort_msg.Data=0;
     end
+
+%     if(alpha>0 && alpha<1)          % when alpha between 1-0, try reduce the torque.
+%         right_leg_joint_5_effort_msg.Data=right_leg_joint_5_effort_msg.Data/2;
+%         right_leg_joint_6_effort_msg.Data=right_leg_joint_6_effort_msg.Data/2;
+%         left_leg_joint_5_effort_msg.Data=left_leg_joint_5_effort_msg.Data/2;
+%         left_leg_joint_6_effort_msg.Data=left_leg_joint_6_effort_msg.Data/2;
+%     end
+     
     send(right_leg_joint_5_effort_pub,right_leg_joint_5_effort_msg);
     send(right_leg_joint_6_effort_pub,right_leg_joint_6_effort_msg);
     send(left_leg_joint_5_effort_pub,left_leg_joint_5_effort_msg);
     send(left_leg_joint_6_effort_pub,left_leg_joint_6_effort_msg);
-
 
 else
     right_leg_joint_5_effort_msg.Data=0;

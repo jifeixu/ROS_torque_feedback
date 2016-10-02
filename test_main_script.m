@@ -31,13 +31,16 @@ z_offset=0.14;
 
 z_footfromground=0.109844722053;
 
+%4/19 try add a offset to X such that x is toward the front.
+% x_front=0.05; %xfront also added in alpha generator for compensation.
+
 % p points are points relative to its respective origin, namely, the hip
 % point. for IK_leg calculation.
-plx=llong-X_long; %plx= point, left foot, x axis
+plx=llong-X_long;%-x_front; %plx= point, left foot, x axis
 ply=llat-y_offset-X_lat; %ply = point, left foot, y axis= llat- y_offset - COM_lat;
 plz=lh+z_offset+z_footfromground; %plz
 
-prx=rlong-X_long;
+prx=rlong-X_long;%-x_front;
 pry=rlat+y_offset-X_lat;
 prz=rh+z_offset+z_footfromground;
 
@@ -73,7 +76,7 @@ end
 % %%
 rosshutdown;
 % ipaddress='172.17.5.208';
-rosinit('192.168.159.128','NodeHost','128.174.226.120');
+rosinit('192.168.159.128','NodeHost','128.174.226.90');
 % rosinit('128.174.226.38');
 % rosinit('172.17.83.139','NodeHost','172.17.119.92');
 % rosinit('172.17.19.199','NodeHost','172.17.195.97');%,'NodeHost','172.17.183.168');
@@ -176,8 +179,8 @@ send(publeg_r,theta_r);
 % pose.ModelName = 'reemc_lower_body';
 pose.ModelName = 'reemc_full';
 pose.ReferenceFrame = 'world';
-pose.Pose.Position.X =0;%0.58 0.377 0.46
-pose.Pose.Position.Y = 0.073;
+pose.Pose.Position.X =-0.022;%0.58 0.377 0.46 % 0.05 due to the x_front
+pose.Pose.Position.Y = 0.076;
 % pose.Pose.Position.Z = 0.725; % when foot elevation is 10cm?
 pose.Pose.Position.Z = 0.70;
 
@@ -352,10 +355,10 @@ end
  plot(t_joint,angle_l(3,:),t,th_l(:,3))
  legend('actual','desired')
  %% lean forward
- ptor.Positions = [0;0.1];
+ ptor.Positions = [0;0.03];
  theta_tor.Points=ptor;
- theta_tor.Points.TimeFromStart.Sec = 1;
-theclock=receive(clock);
+ theta_tor.Points.TimeFromStart.Nsec = 1;
+theclock=receive(clock_sub);
 theta_tor.Header.Stamp.Sec = theclock.Clock_.Sec;
 theta_tor.Header.Stamp.Nsec = theclock.Clock_.Nsec;
 send(pub_tor,theta_tor);

@@ -6,7 +6,7 @@ dX_long=gradient(X_long);
 dX_lat=gradient(X_lat);
 rosshutdown;
 % ipaddress='172.17.5.208';
-rosinit('192.168.159.128','NodeHost','128.174.226.120');
+rosinit('192.168.159.128','NodeHost','128.174.226.90');
 % rosinit('128.174.226.38');
 % rosinit('172.17.83.139','NodeHost','172.17.119.92');
 % rosinit('172.17.19.199','NodeHost','172.17.195.97');%,'NodeHost','172.17.183.168');
@@ -170,7 +170,7 @@ while(~KEY_IS_PRESSED)
 %     disp(['com x ' num2str(calculated_com.X_com),' com y  ',num2str(calculated_com.Y_com),', zmpx ',num2str(global_zmp.x),', zmpy ',num2str(global_zmp.y)]);
 
     
-end
+end 
 ankle_control_on=0;
 disp('loop ended')
 %% Loop working.
@@ -179,8 +179,6 @@ load('traj');
 sys_desired.x=[X_long(1),dX_long(1),Z_long(1)]; %???????CoM
 sys_desired.y=[X_lat(1),dX_lat(1),Z_lat(1)];
 
-% sys_desired.x=[0 0 0];
-% sys_desired.y=[0.09 0 0.065];
 ankle_control_on=1;
 kalman_state_zmp_x.x=0;
 kalman_state_zmp_y.x=0;
